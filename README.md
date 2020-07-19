@@ -144,3 +144,36 @@ AutoApi系列：AutoApi、AutoApiSecret、AutoApiSR、AutoApiS
   最后的最后，再次感谢黑幕/paran大佬
   
   ————wangziyingwen/酷安id-卷腿毛菌
+  
+  ### 附录：原教程
+  > 不保证一定能续订!!!
+不保证一定能续订!!!
+不保证一定能续订!!!
+重要的事情说三遍，微软从未说过有一定的续订标准，所以不保证一定能续订，请不要在e5子号的onedrive存放重要数据，使用本脚本造成的一切后果概不负责。
+
+> 最近e5订阅很火，但是玄学的续订方式也让人摸不着头脑，有的人说挂个oneindex就续订了，有的人说所有第三方程序都挂了一遍也没续订，所以我按照微软的官方文档写了一个刷api的脚本，原理很简单，就是重复调用microsoft graph的api，一次调用10个api，5个onedrive的api还有4个outlook的api,剩下一个是组的api，调用一次后延时等待五分钟再重复调用.
+教程开始:
+> 1.首先去https://portal.azure.com/#home注册一个应用,这一步网上的教程实在是太多了,我就不详细写了,大致写一下流程
+先用e5管理员账号登录网站,然后在主页找到Azure Active Directory点进去，再在左侧目录找到点击应用注册，再点上方的新注册就会跳出一个新建应用的界面，应用名字随意填写,然后选择任何组织目录(任何 Azure AD 目录 - 多租户)中的帐户，重定向url选web，填入http://localhost:53682/,最后点注册即可
+> 2.注册好应用会跳转到应用概述界面,你会看到一个应用程序(客户端) ID,复制这个Id记录下来，后面要用到,然后点击左侧目录的API权限,依次点击添加权限、 Microsoft Graph 、委托的权限,然后依次搜索以下这12个权限并勾选:
+
+> Files.Read.All Files.ReadWrite.All Sites.Read.All Sites.ReadWrite.All
+
+> User.Read.All User.ReadWrite.All Directory.Read.Al Directory.ReadWrite.All
+
+> Mail.Read Mail.ReadWrite MailboxSettings.Read MailboxSettings.ReadWrite
+
+> 全部勾选好后点击底部的添加权限，然后又返回到了API权限界面，这时候你一定要再点一下代表xxx授予管理员同意,不点这个,outlook api会无法调用
+> 3.点击左侧证书和密码,点+新客户端密码,说明随便填，年限随便选多久都行,然后点添加,添加好后,客户端密码下面会有一个值,复制值下面的那一串代码，这是应用秘钥，后面会用到,到这一步，注册应用已经结束了
+> 4.windows下载rclone获取token,点击这里下载rclone,随意下载到电脑的任意一个目录,下载后不要双击rclone.exe安装!,而是在rclone.exe同目录下,按住shift后点鼠标右键，选择在此处打开cmd窗口或在此处打开power shell窗口,弹出窗口后,CMD窗口就执行:
+
+> rclone authorize "onedrive" "之前保存的应用id" "之前保存的应用秘钥"
+> 请自行将双引号内的替换为之前我们保存的应用id和秘钥,示例:
+
+> rclone authorize "onedrive" "729xx16f-8x70-4xb8-8fd6-1xxx9b582b1f" "?@P@4u/fxxcxxx28:B-3i_QxxFxc6_ZO"
+> 如果是power shell的窗口请执行:
+
+> .\rclone authorize "onedrive" "729xx16f-8x70-4xb8-8fd6-1xxx9b582b1f" "?@P@4u/fxxcxxx28:B-3i_QxxFxc6_ZO"
+执行后电脑浏览器会弹出一个界面,登陆自己的e5账号,然后看到浏览器显示Success!，说明获取token成功了。然后我们返回的cmd窗口或者power shell窗口，你会看到一大段Paste the following into your remote machine --->开头,<---End paste结尾的代码，找到"refresh_token":"复制后面的代码直到","expiry"，说白了就是复制refresh_token，不要带双引号,类似格式如下:
+
+> OAQABAAAAAABeAFzDwllzTYxxxx_qYbH8UALCVjtv_6YeHHOwXExxxxxywOKSg2Hd_GSjW1vcLzqL
